@@ -1,21 +1,4 @@
 
-/* Drop Tables */
-
-DROP TABLE IF EXISTS Goods_Task;
-DROP TABLE IF EXISTS Task_Status;
-DROP TABLE IF EXISTS Task;
-DROP TABLE IF EXISTS Contact_Person;
-DROP TABLE IF EXISTS Company;
-DROP TABLE IF EXISTS Goods;
-DROP TABLE IF EXISTS Contract;
-DROP TABLE IF EXISTS Employee;
-DROP TABLE IF EXISTS Post;
-
-DROP DATABASE IF EXISTS practice_bd;
-
-CREATE DATABASE practice_bd;
-
-\c practice_bd
 
 /* Create Tables */
 
@@ -149,6 +132,7 @@ CREATE TABLE Task_Status
 	task_status_name varchar(50) NOT NULL,
 	-- Время выполнения задания. Заполняется после завершения заказа.
 	task_completed_datetime timestamp,
+	task_priority smallint NOT NULL,
 	PRIMARY KEY (task_id)
 ) WITHOUT OIDS;
 
