@@ -1,13 +1,16 @@
-version: '3.5'
-
+version: '3.7'
 services:
-    practice_db:
-        container_name: practice_db
-        ports:
-            - "5431:5432"
-        environment:
-            - POSTGRES_PASSWORD=VupsenPupsen228
-            - POSTGRES_USER=postgres
-        image: postgres:15-alpine
-        volumes:
-            - ./init_db:/docker-entrypoint-initdb.d
+  postgres:
+    container_name: practice_db
+    build: .
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "VupsenPupsen228"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5431:5432"
+volumes:
+  pgdata:
+    driver: local
