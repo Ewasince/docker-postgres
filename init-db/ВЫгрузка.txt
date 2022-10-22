@@ -1,0 +1,46 @@
+-- Функция и процедура для выгрузки данных
+
+CREATE FUNCTION export(oid INT, stamp_start TIMESTAMP, stamp_end TIMESTAMP) 
+RETURNS TABLE(name character varying(50), gen INT, in_time INT, out_time INT, not_time INT, in_process INT)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	name character varying(50)
+	gen INT
+	in_time INT
+	out_time INT
+	not_time INT
+	in_process INT
+	task_id INT
+BEGIN
+	SELECT first_name 
+	FROM employee 
+	INTO name
+	WHERE oid = employee_id
+	
+	FOR task_id IN 
+		SELECT task_id, task_deadline_datetime
+		FROM task
+		WHERE executor = oid
+		AND task_create_datetime 
+		BETWEEN stamp_start
+		AND stamp_end
+	LOOP
+		gen = gen + 1
+		comp_time := SELECT task_completed_datetime FROM task_status
+		IF comp_time < task_deadline_datetime THEN
+			in_time = int_time + 1
+		ELSIF comp_time > task_deadline_datetime THEN
+			out_time = out_time + 1
+		ELSIF comp_time = NULL THEN
+			IF CURRENT_TIMESTAMP < task_deadline_datetime THEN
+				in_process = in_process + 1
+			ELSE
+				not_time = not_time + 1
+			END IF
+		END IF
+	END LOOP;
+	
+	RETURN (name, gen, in_time, out_time, not_time, in_process)
+END;
+$$
