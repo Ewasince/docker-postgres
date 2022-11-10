@@ -15,47 +15,43 @@ CREATE ROLE salaga;
 
 --Менеджер
 --    Создать задания:
-CREATE PROCEDURE create_task (
-	task_id INTEGER
-	,cp_id INT
-	,executor INTEGER
-	,cont_num BIGINT
-	,description TEXT
-	,deadline TIMESTAMP
-	,priority SMALLINT
-	) LANGUAGE SQL
-AS
-$$
+CREATE PROCEDURE create_task(
+	IN task_id integer,
+	IN contact_person_id integer,
+	IN executor integer,
+	IN description text,
+	IN deadline timestamp without time zone,
+	IN priority smallint)
+LANGUAGE 'sql'
+AS $$
 
 INSERT INTO task (
-	task_id
-	,c_p_id
-	,executor
-	,creator
-	,task_decription
-	,task_create_datetime
-	,task_deadline_datetime
-	)
+	task_id,
+	c_p_id,
+	executor,
+	creator,
+	task_decription,
+	task_create_datetime,
+	task_deadline_datetime
+)
 VALUES (
-	task_id
-	,cp_id
-	,executor
-	,to_regrole(CURRENT_USER)
-	,description
-	,CURRENT_TIMESTAMP
-	,deadline
-	);
+	task_id,
+	contact_person_id,
+	executor,
+	to_regrole(CURRENT_USER),
+	description,
+	CURRENT_TIMESTAMP,
+	deadline);
 
 INSERT INTO task_status (
-	task_id
-	,task_status_name
-	,task_priority
-	)
+	task_id,
+	task_status_name,
+	task_priority)
 VALUES (
-	task_id
-	,'N'
-	,priority
-	);$$;
+	task_id,
+	'NEW',
+	priority);
+$$;
 	
 REVOKE ALL ON PROCEDURE create_task FROM PUBLIC;
 GRANT EXECUTE ON PROCEDURE create_task TO manager, admin;
