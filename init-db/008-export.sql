@@ -55,6 +55,6 @@ CREATE PROCEDURE export_csv(oid INT, stamp_start TIMESTAMP, stamp_end TIMESTAMP)
 LANGUAGE plpgsql
 AS $$
 BEGIN
-COPY (SELECT  FROM export(oid, stamp_start, stamp_end)) TO 'Cpostgres_export';
+COPY (SELECT  FROM export(oid, stamp_start, stamp_end)) TO './postgres_export.csv';
 END;
 $$;

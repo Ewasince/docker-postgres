@@ -21,7 +21,8 @@ CREATE PROCEDURE create_task(
 	IN executor integer,
 	IN description text,
 	IN deadline timestamp without time zone,
-	IN priority smallint)
+	IN priority smallint,
+	IN good_id integer)
 LANGUAGE 'sql'
 AS $$
 
@@ -51,6 +52,13 @@ VALUES (
 	task_id,
 	'NEW',
 	priority);
+
+INSERT INTO goods_task (
+	task_id,
+	goods_num)
+VALUES (
+	task_id,
+	good_id);
 $$;
 	
 REVOKE ALL ON PROCEDURE create_task FROM PUBLIC;
