@@ -54,7 +54,7 @@ CALL add_employee('manager', 'Vitali', 'Olegovich', 'Gromyako', 'ezforpapich@yan
 SET ROLE evilarthas;
 
 -- Insert into Task
-CALL create_task(11111002, 101, 16547, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111002, 101, 24685, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
 
 RESET ROLE;
 
@@ -62,10 +62,10 @@ SELECT * FROM employee;
 
 
 -- Export Func
-CALL export_csv17(16547, 
+CALL export_csv(24685, 
 				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
 				
-SELECT * FROM export(16547, 
+SELECT * FROM export(24685, 
 '2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 '2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);

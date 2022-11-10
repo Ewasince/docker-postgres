@@ -56,7 +56,7 @@ $$;
 
 
 
-CREATE PROCEDURE export_csv17(INT, TIMESTAMP, TIMESTAMP) 
+CREATE PROCEDURE export_csv(INT, TIMESTAMP, TIMESTAMP) 
 LANGUAGE plpgsql
 AS $$
 DECLARE
@@ -65,8 +65,8 @@ DECLARE
 	stamp_end ALIAS FOR $3;
 	statement TEXT;
 BEGIN	
-	statement := FORMAT('COPY (SELECT FROM export(%s, %L, %L))
-						TO ''/var/lib/postgresql/data/postgres_export.csv'' WITH CSV;',
+	statement := FORMAT('COPY (SELECT * FROM export(%s, %L, %L))
+						TO ''/var/lib/postgresql/data/postgres_export.csv'' WITH (FORMAT CSV, HEADER);',
 						cur_id, stamp_start, stamp_end);
 	EXECUTE statement;
 END;
