@@ -17,7 +17,7 @@ CREATE PROCEDURE add_employee(
 	AS $$
 	BEGIN
 		-- Создаём новую роль для пользователя
-		EXECUTE FORMAT('CREATE ROLE %I PASSWORD %L', user_nickname, user_password);
+		EXECUTE FORMAT('CREATE ROLE %I LOGIN PASSWORD %L', user_nickname, user_password);
 		--	Наследуем права от соответствующей роли
 		EXECUTE FORMAT('GRANT %I TO %I', post_name, user_nickname);
 		--	Заполняем таблицу 

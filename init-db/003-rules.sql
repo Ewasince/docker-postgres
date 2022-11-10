@@ -64,13 +64,21 @@ $$;
 REVOKE ALL ON PROCEDURE create_task FROM PUBLIC;
 GRANT EXECUTE ON PROCEDURE create_task TO manager, admin;
 
+GRANT SELECT, INSERT ON task_status TO manager; 
+GRANT SELECT, INSERT ON goods_task TO manager;
+
 --    Изменить:
 CREATE POLICY edit_task ON task
 FOR
 UPDATE TO manager USING (creator = to_regrole(current_user));
 
 
-GRANT UPDATE (executor)
+GRANT SELECT, UPDATE (executor)
+	ON task
+	TO manager;
+
+
+GRANT SELECT, INSERT
 	ON task
 	TO manager;
 

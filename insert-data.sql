@@ -51,11 +51,21 @@ CALL add_employee('manager', 'Vitali', 'Olegovich', 'Gromyako', 'ezforpapich@yan
 
 -- ! Посмотреть перед закидыванием таска oid роли !
 
+SET ROLE evilarthas;
+
 -- Insert into Task
-CALL create_task(11111002, 101, 16546, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111002, 101, 16547, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+
+RESET ROLE;
+
+SELECT * FROM employee;
 
 
 -- Export Func
-CALL export_csv(16546, 
-				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE TIMESTAMP, 
-				'2022-11-31 10:00:00'::TIMESTAMP WITHOUT TIME ZONE TIMESTAMP) 
+CALL export_csv17(16547, 
+				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
+				
+SELECT * FROM export(16547, 
+'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
