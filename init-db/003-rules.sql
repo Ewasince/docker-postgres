@@ -67,6 +67,8 @@ GRANT EXECUTE ON PROCEDURE create_task TO manager, admin;
 GRANT SELECT, INSERT ON task_status TO manager; 
 GRANT SELECT, INSERT ON goods_task TO manager;
 
+GRANT UPDATE (task_deadline_datetime) ON task TO manager; 
+
 --    Изменить:
 CREATE POLICY edit_task ON task
 FOR
@@ -96,18 +98,21 @@ SELECT TO manager USING (
 
 --Все
 --    Помечать задание как выполненное:
-CREATE PROCEDURE complete_task (task_id INTEGER) LANGUAGE SQL
+CREATE PROCEDURE complete_task (cur_task_id INTEGER)
+LANGUAGE 'sql'
 AS
 $$
-
-UPDATE task_status
-SET task_status_name = 'C'
-	,task_completed_datetime = CURRENT_TIMESTAMP
-WHERE task_id = task_id $$;
+	UPDATE task_status
+	SET task_status_name = 'C'
+		,task_completed_datetime = CURRENT_TIMESTAMP
+	WHERE task_status.task_id = cur_task_id ;
+$$;
 
 
 REVOKE ALL ON PROCEDURE complete_task FROM PUBLIC;
 GRANT EXECUTE ON PROCEDURE complete_task TO manager, salaga, admin;
+-- GRANT SELECT ON task_status TO manager, salaga
+GRANT SELECT, UPDATE (task_status_name, task_completed_datetime) ON task_status TO manager, salaga;
 
 --Салага (рядовой сотрудник)
 --	Просматривать

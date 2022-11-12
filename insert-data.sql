@@ -1,11 +1,11 @@
 INSERT INTO company(company_reg_num, company_name, work_status, company_post_index, company_address)
 VALUES
-(111122223333, 'OOO РўР Р РљРћР™Р›Рђ', true, '123123', 'Р“. РњРѕСЃРєРІР° СѓР». РџСѓС€РєРёРЅР°-РљРѕР»РѕС‚СѓС€РєРёРЅР° Рґ.2'),
-(111122224444, 'РћРћРћ РўРЇРџ-Р›РЇРџ', true, '321321', 'Рі. РЎР°РЅРєС‚-РџРёС‚РµСЂСЃР±СѓСЂРі СѓР». РЎРѕР»РµРІР°СЏ Рґ.10'),
-(111122225555, 'РћРђРћ Р‘РђР›РђРњРЈРў Рё РћР‘РћР РњРћРў', 'false', '312312', 'Рі. РЎР°РјР°СЂР° СѓР». Р›РµРЅРёРЅР° Рґ.15');
+(111122223333, 'OOO ТРИ КОЙЛА', true, '123123', 'Г. Москва ул. Пушкина-Колотушкина д.2'),
+(111122224444, 'ООО ТЯП-ЛЯП', true, '321321', 'г. Санкт-Питерсбург ул. Солевая д.10'),
+(111122225555, 'ОАО БАЛАМУТ и ОБОРМОТ', 'false', '312312', 'г. Самара ул. Ленина д.15');
 
 
- -- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С…  РІ contact_person
+ -- Вставка данных  в contact_person
 INSERT INTO contact_person(c_p_id, company_reg_num, c_p_phone_number, c_p_email, c_p_first_name, c_p_middle_name, c_p_last_name)
 VALUES 
 (101, 111122223333, 89661880398, 'zaec@yandex.ru', 'Anton', 'Genadievich', 'Lopata'),
@@ -15,7 +15,7 @@ VALUES
 (105, 111122225555, 89671156772, 'svin@yahoo.com', 'Zholud', 'Poddubovich', 'Hryak');
 
 
--- Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… Рѕ РєРѕРЅС‚СЂР°РєС‚Р°С…
+-- Вставка данных о контрактах
 INSERT INTO contract(contract_num, contract_description)
 VALUES
 (101010, 'holodilnik dlya lupi i pupi'),
@@ -23,19 +23,19 @@ VALUES
 (101012, 'contract3');
 
 
---	Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… Рѕ С‚РѕРІР°СЂР°С…
+--	Вставка данных о товарах
 INSERT INTO goods(goods_num, goods_name, goods_decription, contract_num)
 VALUES
-(100, 'РҐРѕР»РѕРґРёР»СЊРЅР°СЏ РєР°РјРµСЂР° 3000', 'РџРѕР»РЅС‹Р№ РѕС‚РјРѕСЂРѕР·РѕРє', 101010),
-(101, 'РўРѕРєР°СЂРЅС‹Р№ СЃС‚Р°РЅРѕРє "РЈР±РёРІРµС†"', 'Р РµР¶РµС‚ РєР°Рє РїРѕ РјР°СЃР»Сѓ', 101011),
-(102, 'РџС‹Р»РµСЃРѕСЃ', 'РџСЂРѕСЃС‚Рѕ РїС‹Р»РµСЃРѕСЃ', 101011),
-(103, 'РџРµСЂС„РѕСЂР°С‚РѕСЂ', 'РќРѕСЂРјР°Р»СЊРЅРѕ РґРѕР»Р±РёС‚', 101010),
-(104, 'Р›РѕР±Р·РёРє', 'Р’СЂРѕРґРµ РїРёР»РёС‚', 101012),
-(105, 'РџС‹Р»РµСЃРѕСЃ mk2', 'РќРµ РїСЂРѕСЃС‚Рѕ РїС‹Р»РµСЃРѕСЃ', 101012),
-(106, 'РџСѓРґР¶',  'РРјР±Р° РїР°С‚С‡Р°', 101010);
+(100, 'Холодильная камера 3000', 'Полный отморозок', 101010),
+(101, 'Токарный станок "Убивец"', 'Режет как по маслу', 101011),
+(102, 'Пылесос', 'Просто пылесос', 101011),
+(103, 'Перфоратор', 'Нормально долбит', 101010),
+(104, 'Лобзик', 'Вроде пилит', 101012),
+(105, 'Пылесос mk2', 'Не просто пылесос', 101012),
+(106, 'Пудж',  'Имба патча', 101010);
 
 
---Р’СЃС‚Р°РІРєР° РґР°РЅРЅС‹С… post
+--Вставка данных post
 INSERT INTO post(post_id, post_name)
 VALUES
 (to_regrole('salaga'), 'salaga'),
@@ -49,23 +49,30 @@ CALL add_employee('salaga', 'Vladislav', 'Iliich', 'Lavrenov', 'Ewasinse@gmail.r
 CALL add_employee('manager', 'VAN', 'DER', 'HOLE', 'dangeonmaster@yandex.ru', 88005352000, 'prettyboy', '125');
 CALL add_employee('manager', 'Vitali', 'Olegovich', 'Gromyako', 'ezforpapich@yandex.ru', 88005352000, 'evilarthas', '126');
 
--- ! РџРѕСЃРјРѕС‚СЂРµС‚СЊ РїРµСЂРµРґ Р·Р°РєРёРґС‹РІР°РЅРёРµРј С‚Р°СЃРєР° oid СЂРѕР»Рё !
+-- ! Посмотреть перед закидыванием таска oid роли !
 
 SET ROLE evilarthas;
 
 -- Insert into Task
-CALL create_task(11111002, 101, 24685, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111002, 101, 16486, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111003, 102, 16546, 'some description2', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 101);
 
 RESET ROLE;
 
 SELECT * FROM employee;
 
+SET ROLE dedmercy;
+
+CALL complete_task(11111003)
+
+RESET ROLE;
+
 
 -- Export Func
-CALL export_csv(24685, 
+CALL export_csv(16486, 
 				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
 				
-SELECT * FROM export(24685, 
+SELECT * FROM export(16486, 
 '2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 '2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);

@@ -37,7 +37,7 @@ BEGIN
 			INTO comp_time
 			WHERE task_status.task_id = current_task.task_id;
 		IF comp_time <= current_task.task_deadline_datetime THEN
-			in_time = int_time + 1;
+			in_time = in_time + 1;
 		ELSIF comp_time > current_task.task_deadline_datetime THEN
 			out_time = out_time + 1;
 		ELSIF comp_time IS NULL THEN
