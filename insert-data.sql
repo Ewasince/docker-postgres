@@ -51,28 +51,50 @@ CALL add_employee('manager', 'Vitali', 'Olegovich', 'Gromyako', 'ezforpapich@yan
 
 -- ! ѕосмотреть перед закидыванием таска oid роли !
 
-SET ROLE evilarthas;
+SELECT * FROM employee;
+
+
+
+
+
+SET ROLE prettyboy;
 
 -- Insert into Task
-CALL create_task(11111002, 101, 16486, 'some description', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
-CALL create_task(11111003, 102, 16546, 'some description2', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 101);
+CALL create_task(11111002, 101, 16549, 'some description in_process', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111003, 102, 16549, 'some description2 in_process', '2022-12-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 101);
+CALL create_task(11111005, 102, 16549, 'some description5 in_time', '2022-12-13 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 104);
+CALL create_task(11111006, 104, 16549, 'some description6 out_time', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 100);
+CALL create_task(11111007, 105, 16549, 'super task', '2022-10-13 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 103);
+CALL create_task(11111008, 103, 16549, 'prosto task', '2022-11-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 105);
+CALL create_task(11111009, 101, 16549, 'pochinit stanok', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111010, 105, 16549, 'kupit arkany', '2022-12-02 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 106);
 
 RESET ROLE;
-
-SELECT * FROM employee;
 
 SET ROLE dedmercy;
 
-CALL complete_task(11111003)
+CALL complete_task(11111006);
+CALL complete_task(11111005);
 
 RESET ROLE;
 
+SELECT * FROM export(16549, 
+'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
+
 
 -- Export Func
-CALL export_csv(16486, 
+CALL export_csv(16549, 
 				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
 				
-SELECT * FROM export(16486, 
-'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
-'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);
+-- Export Func json
+CALL export_json(16549, 
+				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE,
+				'worker1');
+				
+-- Export Func json2
+CALL export_json(16549, 
+				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE);

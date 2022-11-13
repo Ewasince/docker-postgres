@@ -74,3 +74,46 @@ $$;
 
 GRANT EXECUTE ON PROCEDURE export_csv TO admin;
 GRANT EXECUTE ON FUNCTION export TO admin;
+
+
+
+CREATE PROCEDURE export_json(INT, TIMESTAMP, TIMESTAMP) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	cur_id ALIAS FOR $1;
+	stamp_start ALIAS FOR $2;
+	stamp_end ALIAS FOR $3;
+	filename VARCHAR;
+	statement TEXT;
+BEGIN
+	SELECT e_first_name FROM employee INTO filename WHERE employee_id = cur_id;
+	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task WHERE executor = %s) as t)
+						TO ''/var/lib/postgresql/data/postgres_export_%s.json'';', cur_id, filename);
+	EXECUTE statement;
+END;
+$$;
+
+GRANT EXECUTE ON PROCEDURE export_csv TO admin;
+GRANT EXECUTE ON FUNCTION export TO admin;
+
+
+
+CREATE PROCEDURE export_json(INT, TIMESTAMP, TIMESTAMP, VARCHAR) 
+LANGUAGE plpgsql
+AS $$
+DECLARE
+	cur_id ALIAS FOR $1;
+	stamp_start ALIAS FOR $2;
+	stamp_end ALIAS FOR $3;
+	name ALIAS FOR $4;
+	statement TEXT;
+BEGIN
+	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task WHERE executor = %s) as t)
+						TO ''/var/lib/postgresql/data/postgres_export_%s.json'';', cur_id, name);
+	EXECUTE statement;
+END;
+$$;
+
+GRANT EXECUTE ON PROCEDURE export_csv TO admin;
+GRANT EXECUTE ON FUNCTION export TO admin;
