@@ -1,1 +1,3 @@
 psql.bat
+./mongodb/server
+./mongodb/client
