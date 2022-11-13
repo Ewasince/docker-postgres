@@ -91,5 +91,4 @@ BEGIN
 END;
 $$;
 
-GRANT EXECUTE ON PROCEDURE export_csv TO admin;
-GRANT EXECUTE ON FUNCTION export TO admin;
+GRANT EXECUTE ON PROCEDURE export_json TO admin;
