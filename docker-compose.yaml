@@ -11,6 +11,15 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - "5431:5432"
+      
+  mongo_db:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
 volumes:
   pgdata:
-    driver: local
+    
+        
