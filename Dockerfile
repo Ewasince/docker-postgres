@@ -13,3 +13,6 @@ RUN cd / && \
         apt-get purge
 
 COPY init-db /docker-entrypoint-initdb.d
+
+RUN cd  /var/lib/postgresql && \
+	mkdir /export

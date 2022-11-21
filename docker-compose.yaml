@@ -8,7 +8,9 @@ services:
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "VupsenPupsen228"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - type: bind
+        source: ./export
+        target: /var/lib/postgresql/export
     ports:
       - "5431:5432"
       
@@ -18,8 +20,8 @@ services:
     ports:
       - "27017:27017"
     volumes:
-      - pgdata:/var/lib/postgresql/data
-volumes:
-  pgdata:
+      - type: bind
+        source: ./export
+        target: /var/lib/postgresql/export
     
         

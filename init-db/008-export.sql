@@ -66,7 +66,7 @@ DECLARE
 	statement TEXT;
 BEGIN	
 	statement := FORMAT('COPY (SELECT * FROM export(%s, %L, %L))
-						TO ''/var/lib/postgresql/data/postgres_export.csv'' WITH (FORMAT CSV, HEADER);',
+						TO ''/var/lib/postgresql/export/postgres_export.csv'' WITH (FORMAT CSV, HEADER);',
 						cur_id, stamp_start, stamp_end);
 	EXECUTE statement;
 END;
@@ -86,7 +86,7 @@ DECLARE
 	statement TEXT;
 BEGIN
 	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task) as t)
-						TO ''/var/lib/postgresql/data/postgres_export_tasks.json'';');
+						TO ''/var/lib/postgresql/export/postgres_export_tasks.json'';');
 	EXECUTE statement;
 END;
 $$;
