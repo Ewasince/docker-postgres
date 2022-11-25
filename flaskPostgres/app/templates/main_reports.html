@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block reports %}
+    <section>
+        <form action="" method="post" novalidate>
+            <div>
+                <p>form.id.label</p>
+                <div>form.</div>
+                {% for error in form.id.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                <p>form.time_start.label</p>
+                <div>form.time_start()</div>
+                {% for error in form.time_start.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+            <div>
+                <p>form.time_end.label</p>
+                <div>form.time_end()</div>
+                {% for error in form.time_end.errors %}
+                    <span style="color: red;">[{{ error }}]</span>
+                {% endfor %}
+            </div>
+        </form>
+    </section>
+{% endblock %}

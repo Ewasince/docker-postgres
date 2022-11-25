@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Home</a></li>
+            {% if current_user.is_anonymous %}
+                <li><a href="{{ url_for('login') }}">Login</a></li>
+            {% else %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% if current_user.post_id == '16484'%}
+                    <li><a href="{{ url_for('registration') }}">Registration</a></li>
+                    <li><a href="{{ url_for('create_task') }}">Create task</a></li>
+                    <li><a href="{{ url_for('reports') }}">Reports</a></li>
+                {% endif %}
+                {% if current_user.post_id == '16485' %}
+                    <li><a href="{{ url_for('create_task') }}">Create task</a></li>
+                    <li><a href="{{ url_for('reports') }}">Reports</a></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer></footer>
+</body>
+</html>
