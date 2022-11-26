@@ -2,3 +2,5 @@ psql.bat
 server
 client
 export
+__pycache__
+.idea
