@@ -66,7 +66,7 @@ DECLARE
 	statement TEXT;
 BEGIN	
 	statement := FORMAT('COPY (SELECT * FROM export(%s, %L, %L))
-						TO ''/var/lib/postgresql/data/postgres_export.csv'' WITH (FORMAT CSV, HEADER);',
+						TO ''/var/lib/postgresql/export/postgres_export.csv'' WITH (FORMAT CSV, HEADER);',
 						cur_id, stamp_start, stamp_end);
 	EXECUTE statement;
 END;
@@ -77,43 +77,18 @@ GRANT EXECUTE ON FUNCTION export TO admin;
 
 
 
-CREATE PROCEDURE export_json(INT, TIMESTAMP, TIMESTAMP) 
+CREATE PROCEDURE export_json(TIMESTAMP, TIMESTAMP) 
 LANGUAGE plpgsql
 AS $$
-DECLARE
-	cur_id ALIAS FOR $1;
-	stamp_start ALIAS FOR $2;
-	stamp_end ALIAS FOR $3;
-	filename VARCHAR;
+DECLARE	
+	stamp_start ALIAS FOR $1;
+	stamp_end ALIAS FOR $2;
 	statement TEXT;
 BEGIN
-	SELECT e_first_name FROM employee INTO filename WHERE employee_id = cur_id;
-	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task WHERE executor = %s) as t)
-						TO ''/var/lib/postgresql/data/postgres_export_%s.json'';', cur_id, filename);
+	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task) as t)
+						TO ''/var/lib/postgresql/export/postgres_export_tasks.json'';');
 	EXECUTE statement;
 END;
 $$;
 
-GRANT EXECUTE ON PROCEDURE export_csv TO admin;
-GRANT EXECUTE ON FUNCTION export TO admin;
-
-
-
-CREATE PROCEDURE export_json(INT, TIMESTAMP, TIMESTAMP, VARCHAR) 
-LANGUAGE plpgsql
-AS $$
-DECLARE
-	cur_id ALIAS FOR $1;
-	stamp_start ALIAS FOR $2;
-	stamp_end ALIAS FOR $3;
-	name ALIAS FOR $4;
-	statement TEXT;
-BEGIN
-	statement := FORMAT('COPY (SELECT row_to_json(t) FROM (SELECT * FROM task WHERE executor = %s) as t)
-						TO ''/var/lib/postgresql/data/postgres_export_%s.json'';', cur_id, name);
-	EXECUTE statement;
-END;
-$$;
-
-GRANT EXECUTE ON PROCEDURE export_csv TO admin;
-GRANT EXECUTE ON FUNCTION export TO admin;
+GRANT EXECUTE ON PROCEDURE export_json TO admin;
