@@ -1,0 +1,16 @@
+FROM python:3.10.8-slim-buster
+
+#
+WORKDIR /app
+
+#
+COPY ./flaskPostgres/requirements.txt ./requirements.txt
+RUN cd /app \
+&& pip install -r requirements.txt
+
+
+COPY ./flaskPostgres .
+COPY ./docker_config.py ./config.py
+
+#
+CMD python ./app.py
