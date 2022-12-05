@@ -1,4 +1,8 @@
 psql.bat
 flaskPostgres/venv
-flaskPostgres/.idea
-flaskPostgres/__pycache__
+server
+client
+export
+__pycache__
+.idea
+

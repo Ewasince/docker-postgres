@@ -1,16 +1,39 @@
 version: '3.7'
 services:
+
   postgres:
-    container_name: practice_db
-    build: .
+    container_name: postgres_db
+    build: 
+      context : .
+      dockerfile: DockerfilePostgres
     environment:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "postgres"
       POSTGRES_PASSWORD: "VupsenPupsen228"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - type: bind
+        source: ./export
+        target: /var/lib/postgresql/export
     ports:
       - "5431:5432"
-volumes:
-  pgdata:
-    driver: local
+      
+  mongo_db:
+    container_name: nosql_db
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - type: bind
+        source: ./export
+        target: /var/lib/postgresql/export
+        
+  flask:
+    container_name: graphic_app
+    depends_on:
+      - postgres
+    build: 
+      context : .
+      dockerfile: DockerfileFlask
+    ports:
+      - "5001:5000"
