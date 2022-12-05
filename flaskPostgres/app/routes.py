@@ -1,22 +1,41 @@
 from app import app
 from sqlalchemy import text, create_engine
-from flask import render_template, redirect, url_for, flash
+from flask import render_template, redirect, url_for, flash, request
 from app.models import Employee
+from sqlalchemy.exc import OperationalError
 from app.forms import RegistrationForm, LoginForm, CreationTaskForm, TimeReportForm
 from flask_login import current_user, login_user, logout_user, login_required
-from werkzeug.security import generate_password_hash
 from app import Config
 
+current_connection = {"Engine": None}
 
-@app.route('/index')
-@app.route('/')
+
+@app.route('/index', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    name = 'stranger'
-    current_tasks = ''
+    tasks = []
     if current_user.is_authenticated:
-        name = current_user.e_first_name + current_user.e_last_name
+        with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
+            tasks = connection.execute(text(f"SELECT "
+                                            f"task.task_id as id,"
+                                            f"c_p_id,"
+                                            f"task_decription,"
+                                            f"task_create_datetime,"
+                                            f"task_deadline_datetime,"
+                                            f"task_status_name,"
+                                            f"task_completed_datetime,"
+                                            f"task_priority "
+                                            f"FROM task "
+                                            f"JOIN task_status "
+                                            f"ON task_status.task_id=task.task_id "
+                                            f"WHERE executor={current_user.employee_id}"))
+    if request.method == "POST":
+        with current_connection['Engine'].connect() as connection:
+            connection.execution_options(isolation_level="AUTOCOMMIT")
+            connection.execute(text(f"CALL complete_task({request.form.get('task-select')});"))
+        return redirect(url_for('index'))
 
-    return render_template('index.html', title='test', name=name)
+    return render_template('index.html', title='Home', tasks=list(tasks))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -25,8 +44,15 @@ def login():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate_on_submit():
-        employee = Employee.query.filter_by(e_nickname=form.username.data).first()
-        if employee is None or not employee.check_password(form.password.data):
+        employee = Employee.query.filter_by(e_nickname=form.username.data, ).first()
+        if employee is None:
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        try:
+            uri = f'postgresql://{form.username.data}:{form.password.data}@localhost:5431/postgres'
+            if [row[0] for row in create_engine(uri).connect().execute(text("SELECT 1"))] == [1]:
+                current_connection['Engine'] = create_engine(uri)
+        except OperationalError as e:
             flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(employee)
@@ -35,29 +61,28 @@ def login():
 
 
 @app.route('/logout', methods=['GET', 'POST'])
+@login_required
 def logout():
     logout_user()
-    with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
-        connection.execution_options(isolation_level="AUTOCOMMIT")
-        connection.execute(text(f"RESET ROLE"))
     return redirect(url_for('index'))
 
 
 @app.route('/registration', methods=['GET', 'POST'])
+@login_required
 def registration():
     form = RegistrationForm()
     if form.validate_on_submit():
-        with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
+        with current_connection['Engine'].connect() as connection:
             connection.execution_options(isolation_level="AUTOCOMMIT")
             connection.execute(text(f"CALL add_employee("
-                                             f" '{form.post.data}',"
-                                             f" '{form.first_name.data}',"
-                                             f" '{form.middle_name.data}',"
-                                             f" '{form.last_name.data}',"
-                                             f" '{form.email.data}',"
-                                             f" {form.phone.data},"
-                                             f" '{form.username.data}',"
-                                             f" '{generate_password_hash(form.password.data)}');"))
+                                    f" '{form.post.data}',"
+                                    f" '{form.first_name.data}',"
+                                    f" '{form.middle_name.data}',"
+                                    f" '{form.last_name.data}',"
+                                    f" '{form.email.data}',"
+                                    f" {form.phone.data},"
+                                    f" '{form.username.data}',"
+                                    f" '{form.password.data}');"))
 
         return redirect(url_for('index'))
 
@@ -65,6 +90,7 @@ def registration():
 
 
 @app.route('/create', methods=['GET', 'POST'])
+@login_required
 def create_task():
     form = CreationTaskForm()
     with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
@@ -84,7 +110,7 @@ def create_task():
     form.good.choices = goods
 
     if form.validate_on_submit():
-        with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
+        with current_connection['Engine'].connect() as connection:
             connection.execution_options(isolation_level="AUTOCOMMIT")
             connection.execute(text(f"SET ROLE {current_user.e_nickname};"))
             connection.execute(text(f"CALL create_task("
@@ -101,7 +127,8 @@ def create_task():
     return render_template('creation_task.html', title='Creation Task', form=form)
 
 
-@app.route('/reporting')
+@app.route('/reporting', methods=['GET', 'POST'])
+@login_required
 def reports():
     form = TimeReportForm()
     result = []
@@ -109,19 +136,16 @@ def reports():
     with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
         connection.execution_options(isolation_level="AUTOCOMMIT")
         employees = connection.execute((text("SELECT employee_id, e_first_name, e_last_name "
-                                         "FROM employee")))
+                                             "FROM employee")))
 
     employees = [(item[0], f'{item[1] + " " + item[2]}') for item in employees]
     form.id.choices = employees
 
     if form.validate_on_submit():
-        with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
+        with current_connection['Engine'].connect() as connection:
             connection.execution_options(isolation_level="AUTOCOMMIT")
-            connection.execute(text(f"SELECT * FROM export("
+            result = connection.execute(text(f"SELECT * FROM export("
                                     f"{form.id.data},"
-                                    f"{form.time_start.data},"
-                                    f"{form.time_end.data}"
-                                    f");"))
-        return redirect(url_for('index'))
-    return render_template('main_reports.html', title='Time reporting', form=form, data=result)
-
+                                    f"'{form.time_start.data}'::TIMESTAMP WITHOUT TIME ZONE,"
+                                    f"'{form.time_end.data}'::TIMESTAMP WITHOUT TIME ZONE);"))
+    return render_template('main_reports.html', title='Time reporting', form=form, data=list(result))

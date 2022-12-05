@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, EmailField, SelectField,\
-    TelField, TextAreaField, DateTimeField, IntegerField
+    TelField, TextAreaField, DateTimeField, IntegerField, BooleanField
 from wtforms.validators import DataRequired
 
 
@@ -15,7 +15,7 @@ class RegistrationForm(FlaskForm):
     middle_name = StringField('Middle name')
     last_name = StringField('Last name', validators=[DataRequired()])
     post = SelectField('Post',
-                       choices=[('admin', 'Administrator'),('manager', 'Manager'),( 'salaga','Regular worker')],
+                       choices=[('manager', 'Manager'),( 'salaga','Regular worker')],
                        validators=[DataRequired()])
     phone = StringField('Phone', validators=[DataRequired()])
     email = EmailField('Email', validators=[DataRequired()])
@@ -48,3 +48,4 @@ class TimeReportForm(FlaskForm):
     id = SelectField("Employee", choices=[])
     time_start = DateTimeField('Time start format:', validators=[DataRequired()])
     time_end = DateTimeField('Time end format:', validators=[DataRequired()])
+    submit = SubmitField("Check report")
