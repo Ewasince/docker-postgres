@@ -1,1 +1,4 @@
 psql.bat
+flaskPostgres/venv
+flaskPostgres/.idea
+flaskPostgres/__pycache__
