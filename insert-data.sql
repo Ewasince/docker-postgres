@@ -42,6 +42,9 @@ VALUES
 (to_regrole('manager'), 'manager'),
 (to_regrole('admin'), 'admin');
 
+INSERT INTO employee(employee_id, post_id, e_first_name, e_last_name, e_email, e_phone_number, e_nickname)
+VALUES (to_regrole('admin'), to_regrole('admin'), 'Viktor', 'Korneplod', 'derevo@gmail.com', 88005353535, 'admin')
+
 
 -- workers
 CALL add_employee('salaga', 'Artem', 'Mihailovich', 'Anichkov', 'Dedmercy@yandex.ru', 88005353535, 'dedmercy', '123');
@@ -62,15 +65,14 @@ SET ROLE prettyboy;
 -- Insert into Task
 CALL create_task(11111002, 101, 16549, 'some description in_process', '2022-12-10 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
 CALL create_task(11111003, 102, 16549, 'some description2 in_process', '2022-12-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 101);
-CALL create_task(11111006, 104, 16549, 'some description6 out_time', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 100);
-CALL create_task(11111007, 105, 16548, 'super task', '2022-10-13 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 103);
-CALL create_task(11111008, 103, 16548, 'prosto task', '2022-11-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 105);
-
-SET ROLE evilarthas;
-
 CALL create_task(11111005, 102, 16549, 'some description5 in_time', '2022-12-13 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 104);
-CALL create_task(11111009, 101, 16548, 'pochinit stanok', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
-CALL create_task(11111010, 105, 16548, 'kupit arkany', '2022-12-02 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 106);
+CALL create_task(11111006, 104, 16549, 'some description6 out_time', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 100);
+CALL create_task(11111007, 105, 16549, 'super task', '2022-10-13 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 103);
+CALL create_task(11111008, 103, 16549, 'prosto task', '2022-11-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 105);
+CALL create_task(11111009, 101, 16549, 'pochinit stanok', '2022-10-12 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 102);
+CALL create_task(11111010, 105, 16549, 'kupit arkany', '2022-12-02 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 10::smallint, 106);
+
+RESET ROLE;
 
 SET ROLE dedmercy;
 
@@ -91,7 +93,7 @@ CALL export_csv(16549,
 				
 -- Export Func json
 CALL export_json(16549, 
-				'2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
+				'	2022-11-01 10:00:00'::TIMESTAMP WITHOUT TIME ZONE, 
 				'2022-11-30 10:00:00'::TIMESTAMP WITHOUT TIME ZONE,
 				'worker1');
 				

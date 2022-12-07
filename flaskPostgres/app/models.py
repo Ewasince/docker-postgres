@@ -68,7 +68,6 @@ class Employee(UserMixin, db.Model):
     e_email = db.Column(db.VARCHAR(50), nullable=False)
     e_phone_number = db.Column(db.VARCHAR(100), nullable=False)
     e_nickname = db.Column(db.VARCHAR(50), nullable=False)
-    e_password = db.Column(db.VARCHAR(128), nullable=False)
     post_id = db.Column(db.INTEGER, db.ForeignKey('post.post_id'))
     creators = db.relationship('Task', backref='creators', lazy='dynamic', foreign_keys="Task.creator")
     executors = db.relationship('Task', backref='executors', lazy='dynamic', foreign_keys="Task.executor")

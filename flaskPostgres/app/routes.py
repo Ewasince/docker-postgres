@@ -1,6 +1,6 @@
 from app import app
 from sqlalchemy import text, create_engine
-from flask import render_template, redirect, url_for, flash, request
+from flask import render_template, redirect, url_for, flash, request, abort
 from app.models import Employee
 from sqlalchemy.exc import OperationalError
 from app.forms import RegistrationForm, LoginForm, CreationTaskForm, TimeReportForm
@@ -49,11 +49,12 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('login'))
         try:
-            uri = f'postgresql://{form.username.data}:{form.password.data}@localhost:5431/postgres'
+            uri = f'postgresql://{form.username.data}:{form.password.data}@postgres:5432/postgres'
             if [row[0] for row in create_engine(uri).connect().execute(text("SELECT 1"))] == [1]:
                 current_connection['Engine'] = create_engine(uri)
         except OperationalError as e:
             flash('Invalid username or password')
+            print(e)
             return redirect(url_for('login'))
         login_user(employee)
         return redirect(url_for('index'))
@@ -70,6 +71,8 @@ def logout():
 @app.route('/registration', methods=['GET', 'POST'])
 @login_required
 def registration():
+    if current_user.post_id != 16484:
+        abort(403)
     form = RegistrationForm()
     if form.validate_on_submit():
         with current_connection['Engine'].connect() as connection:
@@ -92,6 +95,8 @@ def registration():
 @app.route('/create', methods=['GET', 'POST'])
 @login_required
 def create_task():
+    if current_user.post_id == 16486:
+        abort(403)
     form = CreationTaskForm()
     with create_engine(Config.SQLALCHEMY_DATABASE_URI).connect() as connection:
         connection.execution_options(isolation_level="AUTOCOMMIT")
@@ -130,6 +135,8 @@ def create_task():
 @app.route('/reporting', methods=['GET', 'POST'])
 @login_required
 def reports():
+    if current_user.post_id == 16486:
+        abort(403)
     form = TimeReportForm()
     result = []
 
@@ -149,3 +156,8 @@ def reports():
                                     f"'{form.time_start.data}'::TIMESTAMP WITHOUT TIME ZONE,"
                                     f"'{form.time_end.data}'::TIMESTAMP WITHOUT TIME ZONE);"))
     return render_template('main_reports.html', title='Time reporting', form=form, data=list(result))
+    
+    
+@app.errorhandler(403)
+def user_have_not_enoght_rights(error):
+    return 'You have not enoght rights =(', 403

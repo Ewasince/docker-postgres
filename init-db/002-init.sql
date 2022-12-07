@@ -66,8 +66,6 @@ CREATE TABLE Employee
 	e_phone_number varchar(100) NOT NULL,
 	-- Никнейм сотрудника
 	e_nickname varchar(20) NOT NULL,
-	-- Пароль сотрудника
-	e_password varchar(20) NOT NULL,
 	PRIMARY KEY (employee_id)
 ) WITHOUT OIDS;
 
@@ -241,7 +239,6 @@ COMMENT ON COLUMN Employee.e_last_name IS 'Фамилия сотрудника';
 COMMENT ON COLUMN Employee.e_email IS 'Адрес электронной почты';
 COMMENT ON COLUMN Employee.e_phone_number IS 'Телефонный номер сотрудника';
 COMMENT ON COLUMN Employee.e_nickname IS 'Никнейм сотрудника';
-COMMENT ON COLUMN Employee.e_password IS 'Пароль сотрудника';
 COMMENT ON COLUMN Goods.goods_num IS 'Серийный номер товара';
 COMMENT ON COLUMN Goods.goods_name IS 'Наименование товара';
 COMMENT ON COLUMN Goods.goods_decription IS 'Описание товара.';

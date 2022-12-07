@@ -12,8 +12,7 @@ CREATE PROCEDURE add_employee(
 		email character varying(50),
 		phone_number bigint,
 		user_nickname character varying(12),
-		user_password character varying(12)
-		)
+		user_password character varying(20))
 	AS $$
 	BEGIN
 		-- Создаём новую роль для пользователя
@@ -29,8 +28,7 @@ CREATE PROCEDURE add_employee(
 			e_last_name,
 			e_email,
 			e_phone_number,
-			e_nickname,
-			e_password)
+			e_nickname)
 			
 		VALUES(
 			to_regrole(user_nickname),
@@ -40,8 +38,7 @@ CREATE PROCEDURE add_employee(
 			last_name,
 			email,
 			phone_number,
-			user_nickname,
-			user_password);
+			user_nickname);
 			
 	End;
 	$$
