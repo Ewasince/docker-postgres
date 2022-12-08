@@ -63,7 +63,7 @@ $$;
 	
 REVOKE ALL ON PROCEDURE create_task FROM PUBLIC;
 GRANT EXECUTE ON PROCEDURE create_task TO manager, admin;
-GRANT SELECT(e_first_name) ON employee TO manager;
+GRANT SELECT ON employee TO manager;
 
 GRANT SELECT, INSERT ON task_status TO manager; 
 GRANT SELECT, INSERT ON goods_task TO manager;
